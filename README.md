@@ -1,6 +1,6 @@
-# imc_calculator
+# Flutter IMC Calculator
 
-A calculator to calculate imc of people.
+A simple project to calculate the IMC of people.
 
 ## Getting Started
 
