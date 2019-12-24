@@ -8,6 +8,42 @@ class Home extends StatefulWidget {
 }
 
 class _HomeState extends State<Home> {
+  TextEditingController weightController = TextEditingController();
+  TextEditingController heightController = TextEditingController();
+  String _info = "Informe seus dados";
+
+  void _resetFields() {
+    weightController.text = "";
+    heightController.text = "";
+    setState(() {
+      _info = "Informe seus dados";
+    });
+  }
+
+  void _calculate() {
+    String message = "";
+    double weight = double.parse(weightController.text);
+    double height = double.parse(heightController.text) / 100;
+    double imc = weight / (height * height);
+    if (imc < 18.6) {
+      message = "Abaixo do peso. (${imc.toStringAsPrecision(4)})";
+    } else if (imc >= 18.6 && imc < 24.9) {
+      message = "Peso ideal (${imc.toStringAsPrecision(4)})";
+    } else if (imc >= 24.9 && imc < 29.9) {
+      message = "Levemente acima do peso (${imc.toStringAsPrecision(4)})";
+    } else if (imc >= 29.9 && imc < 34.9) {
+      message = "Obesidade grau I (${imc.toStringAsPrecision(4)})";
+    } else if (imc >= 34.9 && imc < 39.9) {
+      message = "Obesidade grau II (${imc.toStringAsPrecision(4)})";
+    } else {
+      message = "Obesidade grau III (${imc.toStringAsPrecision(4)})";
+    }
+
+    setState(() {
+      _info = message;
+    });
+  }
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -18,7 +54,7 @@ class _HomeState extends State<Home> {
           actions: <Widget>[
             IconButton(
               icon: Icon(Icons.refresh),
-              onPressed: () {},
+              onPressed: _resetFields,
             )
           ],
         ),
@@ -37,6 +73,7 @@ class _HomeState extends State<Home> {
                   ),
                   textAlign: TextAlign.center,
                   style: TextStyle(color: Colors.green, fontSize: 25),
+                  controller: weightController,
                 ),
                 TextField(
                   keyboardType: TextInputType.number,
@@ -46,20 +83,21 @@ class _HomeState extends State<Home> {
                   ),
                   textAlign: TextAlign.center,
                   style: TextStyle(color: Colors.green, fontSize: 25),
+                  controller: heightController,
                 ),
                 const SizedBox(height: 32.0),
                 Container(
                     height: 75.0,
                     width: double.infinity,
                     child: RaisedButton(
-                        onPressed: () {},
+                        onPressed: _calculate,
                         child: Text(
                           "Calcular",
                           style: TextStyle(color: Colors.white, fontSize: 25.0),
                         ),
                         color: Colors.green)),
                 const SizedBox(height: 32.0),
-                Text("Info",
+                Text(_info,
                     style: TextStyle(color: Colors.green, fontSize: 25.0))
               ],
             )));
